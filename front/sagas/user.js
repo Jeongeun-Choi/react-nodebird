@@ -1,47 +1,65 @@
-import { all, fork, takeLatest, call, put, take } from 'redux-saga/effects';
-import { LOG_IN, LOG_IN_SUCCESS, LOG_IN_FAILURE} from '../reducers/user';
-
-//call은 함수 동기적 호출
-//fork는 함수 비동기적 호출
+import { all, delay, fork, takeLatest, takeEvery, call, put, take } from 'redux-saga/effects';
+import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_FAILURE, SIGN_UP_SUCCESS} from '../reducers/user';
+import axios from 'axios';
+//call은 함수 동기적 호출 => 순서를 무조건! 지켜야할때
+//fork는 함수 비동기적 호출 => 얘 실행해두고 다음꺼 실행해도 될 때 
 //put은 액션 dispatch
-
-const HELLO_SAGA = 'HELLO_SAGA';
+//takeEvery는 while(true)와 유사하다!
+//takeLatest는 동시에 실행하면 맨마지막만 받겠다... 뭐 그렇대 ex)로그인 버튼 막 클릭할때 마지막에 누른것만 유효하게 인정하고싶을때 
+/*
+여러번 클릭하는게 실수다! =>takeLatest 사용
+여러번 클릭해야한다! => takeEvery 사용
+*/
 
 function loginAPI() {
     //서버에 요청을 보내는 부분
+    return axios.post('/login');
 }
 
 function* login() {
     try{
-        yield call(loginAPI);
+        //yield call(loginAPI);
+        yield delay(2000);
         yield put({
             type: LOG_IN_SUCCESS
-        })
+        });
     }catch (e) {
         console.error(e);
         yield put({
             type: LOG_IN_FAILURE
-        })
+        });
     }
 }
 
 function* watchLogin() {
-    while(true){
-        yield take(LOG_IN);
-        yield delay(2000);
+    yield takeEvery(LOG_IN_REQUEST, login) 
+}
+
+function signUpAPI() {
+    //서버에 요청을 보내는 부분
+}
+
+function* signUp() {
+    try{
+        yield call(signUpAPI);
         yield put({
-            type: LOG_IN_SUCCESS,
+            type: SIGN_UP_SUCCESS
         });
-    }   
+    }catch (e) {
+        console.error(e);
+        yield put({
+            type: SIGN_UP_FAILURE
+        });
+    }
 }
 
 function* watchSignUp() {
-
+    yield takeEvery(SIGN_UP_REQUEST, signUp);
 }
 
 export default function* userSaga() {
     yield all([
-        watchLogin(),
-        watchSignUp(),
+        fork(watchLogin),
+        fork(watchSignUp),
     ]);
 }
