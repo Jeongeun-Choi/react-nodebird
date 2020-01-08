@@ -5,14 +5,9 @@ import PostForm from '../components/PostForm';
 import { useDispatch, useSelector } from 'react-redux';
 
 const Home = () => {
-    const { isLoggedIn, user } = useSelector(state => state.user);
+    const { isLoggedIn} = useSelector(state => state.user);
     const { mainPosts } = useSelector(state => state.post);
-    const dispatch= useDispatch();
-
-    useEffect(() => {
-        
-    }, []);
-
+    
     return(
     <div>
         {isLoggedIn && <PostForm />}

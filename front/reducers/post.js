@@ -2,17 +2,43 @@ import produce from 'immer';
 
 export const initialState = {
     mainPosts: [{
+        id: 1,
         User: {
             id: 1,
             nickname: '둉은이',
         },
         content: '첫 번째 게시글',
         img: '',
+        Comments: [],
     }], //화면에 보일 포스트들
     imagePaths: [], //미리보기 이미지 경로
-    addPostErrorReason: false,    //포스트 업로드 실패 사유
+    addPostErrorReason: '',    //포스트 업로드 실패 사유
     isAddingPost: false,          //포스트 업로드 중
+    postAdded: false,               //포스트 업로드 성공
+    isAddingComment: false,
+    addCommentErrorReason: '',
+    commentAdded: false,
 };
+
+const dummyPost = {
+    id: 2,
+    User: {
+        id: 1,
+        nickname: '정은',
+    },
+    content: '나는 더미입니다.',
+    Comments: [],
+};
+
+const dummyComment = {
+    id: 1,
+    User: {
+        id: 1,
+        nickname: '정은',
+    },
+    createdAt: new Date(),
+    content: '더미 댓글입니다.',
+}
 
 export const LOAD_MAIN_POSTS_REQUEST = 'LOAD_MAIN_POSTS_REQUEST';
 export const LOAD_MAIN_POSTS_SUCCESS = 'LOAD_MAIN_POSTS_SUCCESS';
@@ -32,9 +58,9 @@ export const UPLOAD_IMAGES_FAILURE = 'UPLOAD_IMAGES_FAILURE';
 
 export const REMOVE_IMAGE = 'REMOVE_IMAGE';
 
-const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
-const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
-const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
+export const ADD_POST_REQUEST = 'ADD_POST_REQUEST';
+export const ADD_POST_SUCCESS = 'ADD_POST_SUCCESS';
+export const ADD_POST_FAILURE = 'ADD_POST_FAILURE';
 
 export const LIKE_POST_REQUEST = 'LIKE_POST_REQUEST';
 export const LIKE_POST_SUCCESS = 'LIKE_POST_SUCCESS';
@@ -64,6 +90,38 @@ const reducer = (state = initialState, action) => {
     return produce(state, draft => {
         switch(action.type){
             case ADD_POST_REQUEST: {
+                draft.isAddingPost = true;
+                draft.addPostErrorReason = '';
+                draft.postAdded = false;
+                break;
+            }
+            case ADD_POST_SUCCESS: {
+                draft.isAddingPost = false;
+                draft.mainPosts.unshift(dummyPost);
+                draft.postAdded = true;
+                break;
+            }
+            case ADD_POST_FAILURE: {
+                draft.isAddingComment = false;
+                draft.addCommentErrorReason = action.error;
+                break;
+            }
+            case ADD_COMMENT_REQUEST: {
+                draft.isAddingComment = true;
+                draft.addCommentErrorReason = '';
+                draft.commentAdded = false;
+                break;
+            }
+            case ADD_COMMENT_SUCCESS: {
+                const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+                draft.mainPosts[postIndex].Comments.push(dummyComment);
+                draft.isAddingComment = false;
+                draft.commentAdded = true;
+                break;
+            }
+            case ADD_COMMENT_FAILURE: {
+                draft.isAddingComment = false;
+                draft.addCommentErrorReason = action.error;
                 break;
             }
             default:

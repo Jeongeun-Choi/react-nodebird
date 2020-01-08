@@ -8,8 +8,8 @@ import { LOG_IN_REQUEST } from '../reducers/user';
 const LoginForm = () => {
     const [id, onChangeId] = useInput('');
     const [password, onChangePassword] = useInput('');
-    const { isLoggingIn } = useSelector
-    const dispatch = useDispatch(state => state.user);
+    const { isLoggingIn } = useSelector(state => state.user)
+    const dispatch = useDispatch();
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault();

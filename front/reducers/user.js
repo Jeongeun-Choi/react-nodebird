@@ -19,6 +19,7 @@ const dummyUser = {
     Post: [],
     Followings: [],
     Followers: [],
+    id: 1,
 };
 
 //밑에 애들(REQUEST, SUCCESS, FAILURE)은 서버쪽에 갔다와야하는 비동기 액션 => 리덕스 사가 써라
@@ -80,11 +81,23 @@ export default (state = initialState, action) => {
             }
             case LOG_OUT_REQUEST: {
                 draft.isLoggedIn = false;
-                draft.user = null;
+                draft.me = null;
                 break;
             }
             case SIGN_UP_REQUEST: {
-                draft.signUpData = action.data;
+                draft.isSigningUp = true;
+                draft.isSignedUp = false;
+                draft.signUpErrorReason = '';
+                break;
+            }
+            case SIGN_UP_SUCCESS: {
+                draft.isSigningUp = false;
+                draft.isSignedUp = true;
+                break;
+            }
+            case SIGN_UP_FAILURE: {
+                draft.isSigningUp = false;
+                draft.signUpErrorReason = action.error;
                 break;
             }
             default: {

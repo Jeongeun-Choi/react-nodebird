@@ -1,4 +1,4 @@
-import { all, delay, fork, takeLatest, takeEvery, call, put, take } from 'redux-saga/effects';
+import { all, delay, fork, takeEvery, put } from 'redux-saga/effects';
 import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_FAILURE, SIGN_UP_SUCCESS} from '../reducers/user';
 import axios from 'axios';
 //call은 함수 동기적 호출 => 순서를 무조건! 지켜야할때
@@ -41,14 +41,17 @@ function signUpAPI() {
 
 function* signUp() {
     try{
-        yield call(signUpAPI);
+        // yield call(signUpAPI);
+        yield delay(2000);
+        throw new Error('에러에ㅓ레어렝');
         yield put({
             type: SIGN_UP_SUCCESS
         });
     }catch (e) {
         console.error(e);
         yield put({
-            type: SIGN_UP_FAILURE
+            type: SIGN_UP_FAILURE,
+            error: e
         });
     }
 }
