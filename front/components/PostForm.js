@@ -13,7 +13,7 @@ const PostForm = () => {
     }, [postAdded === true]);
 
     const onSubmitForm = useCallback((e) => {
-        e.preventDefault();
+        e.preventDefault(); //싱글페이지 어쩌고라서 페이지가 넘어가면 안돼! 그래서 e.preventDefault() 사용
         dispatch({
             type: ADD_POST_REQUEST,
             data: {
