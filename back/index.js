@@ -23,6 +23,6 @@ app.use('/api/user', userAPIRouter);
 app.use('/api/post', postAPIRouter);
 app.use('/api/posts', postsAPIRouter);
 
-app.listen(3065, ()=>{
+app.listen(3060, ()=>{
     console.log('server is running on http://localhost:3065');
 });
