@@ -17,10 +17,8 @@ app.use(express.urlencoded({extended: true}));
 app.use(cors());
 
 //요거를 라우터라고하고 (req, res)부분을 컨트롤러라고함
-app.get('/', (req, res) => {    //'/'은 로컬호스트 뒤에 붙는 주소! 프론트에서 이쪽 서버에 요청을 하면 'Hello server'라고 응답해줌
-    res.send('Hello, server');
-});
-
+//'/'은 로컬호스트 뒤에 붙는 주소! 프론트에서 이쪽 서버에 요청을 하면 'Hello server'라고 응답해줌
+  
 app.use('/api/user', userAPIRouter);
 app.use('/api/post', postAPIRouter);
 app.use('/api/posts', postsAPIRouter);
