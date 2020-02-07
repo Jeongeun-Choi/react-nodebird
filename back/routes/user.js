@@ -4,7 +4,7 @@
 
 const express = require('express');
 const bcrypt = require('bcrypt');
-const db = require('../modules');
+const db = require('../models');
 
 const router = express.Router();
 
@@ -62,4 +62,4 @@ router.delete('/:id/follower', (req, res) => {
 router.get('/:id/posts', (req, res) => {
     
 });
-module.exports = Router;
+module.exports = router;
