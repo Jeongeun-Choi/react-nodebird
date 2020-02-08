@@ -23,7 +23,7 @@ router.post('/', async (req, res, next) => {    // POST /api/user 회원가입
         if(exUser) {
             return res.status(403).send('이미 사용중인 아이디입니다.');
         }
-        const hashedPassword = await bcrypt.hash(req.bodypassword, 12); //비밀번호 암호화
+        const hashedPassword = await bcrypt.hash(req.body.password, 12); //비밀번호 암호화, salt는 10~13 사이로
         const newUser = await db.User.create({
             nickname: req.body.nickname,
             userId: req.body.userId,

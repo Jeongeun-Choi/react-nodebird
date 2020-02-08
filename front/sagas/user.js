@@ -1,4 +1,4 @@
-import { all, delay, fork, takeEvery, put } from 'redux-saga/effects';
+import { all, delay, fork, takeEvery, put, call } from 'redux-saga/effects';
 import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_FAILURE, SIGN_UP_SUCCESS} from '../reducers/user';
 import axios from 'axios';
 //call은 함수 동기적 호출 => 순서를 무조건! 지켜야할때
@@ -35,7 +35,7 @@ function* watchLogin() {
     yield takeEvery(LOG_IN_REQUEST, login) 
 }
 
-function signUpAPI(signUPData) {
+function signUpAPI(signUpData) {
     //서버에 요청을 보내는 부분
     return axios.post('http://localhost:3065/api/user/', signUpData)
 }
@@ -44,7 +44,6 @@ function* signUp(action) {
     try{
         // yield call(signUpAPI);
         yield call(signUpAPI, action.data); //call 함수는 첫번째는 함수 두번째는 인자
-        throw new Error('에러에ㅓ레어렝');
         yield put({
             type: SIGN_UP_SUCCESS
         });

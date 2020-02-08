@@ -48,7 +48,7 @@ const Signup = () =>{
                 nickname: nick,
             } 
         });
-    }, [password, passwordCheck, term]);
+    }, [id, nick, password, passwordCheck, term]);
 
     const onChangePasswordCheck = useCallback((e) => {
         setPasswordError(e.target.value !== password);
