@@ -5,14 +5,17 @@ const cookieParser = require('cookie-parser');
 const expressSession = require('express-session');
 const dotenv = require('dotenv');   //여기에 비밀번호나 보안키 설정해둠.
 
+const passportConfig = require('./passport');
 const db = require('./models');
 const userAPIRouter = require('./routes/user'); //라우터 합침
 const postAPIRouter = require('./routes/post');
 const postsAPIRouter = require('./routes/posts');
+const passport = require('passport');
 
 dotenv.config();
 const app = express();
 db.sequelize.sync();
+passportConfig();
 
 //use쓰면 뭐 미들웨어? 사용 할 수 있다
 app.use(morgan('dev')); //요청 들어오는거에 대해 로그가 남음
@@ -29,6 +32,8 @@ app.use(expressSession({
         secure: false,  //https를 쓸 때 true
     },
 }));
+app.use(passport.initialize());
+app.use(passport.session());    //expressSession 밑에 적어야함, expressSession을 내부적으로 사용.
 
 //요거를 라우터라고하고 (req, res)부분을 컨트롤러라고함
 //'/'은 로컬호스트 뒤에 붙는 주소! 프론트에서 이쪽 서버에 요청을 하면 'Hello server'라고 응답해줌
