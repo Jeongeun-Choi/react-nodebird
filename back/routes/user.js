@@ -43,7 +43,9 @@ router.get('/:id', (req, res) => {    //남의 정보를 가져오는 것
 
 });
 router.post('/logout', (req, res) => {
-
+    req.logout();
+    req.session.destroy();
+    res.send('logout 성공');
 });
 router.post('/login', (req, res, next) => {   //POST /api/user/login
     passport.authenticate( 'local', (err, user, info) => {  //done의 첫번째, 두번째, 세번째 인수
@@ -58,11 +60,11 @@ router.post('/login', (req, res, next) => {   //POST /api/user/login
             if (loginErr) {
                 return next(loginErr);
             }
-            const filteredUser = Object.assign({}, user);
+            const filteredUser = Object.assign({}, user.toJSON());
             delete filteredUser.password;
             return res.json(filteredUser);
         });
-    })(req, res, next) 
+    })(req, res, next);
 });
 router.get('/:id/follow', (req, res) => {   // /api/user/:id/follow 
     
