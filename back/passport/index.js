@@ -11,7 +11,7 @@ module.exports = () => {
     //메모리 검사해서 쿠키랑 연관된 id를 찾고 그를 토대로 유저정보를 DB에서 얻어옴
     passport.deserializeUser(async(id, done) => {
         try{
-            const user = await db.User.fineOne({
+            const user = await db.User.findOne({
                 where: {id},
             });
             return done(null, user);   //req.user

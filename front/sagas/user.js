@@ -15,7 +15,9 @@ axios.defaults.baseURL = 'http://localhost:3065/api';
 
 function loginAPI(loginData) {
     //서버에 요청을 보내는 부분
-    return axios.post('/user/login', loginData);
+    return axios.post('/user/login', loginData, {
+        withCredentials: true,  //쿠키생성
+    });
 }
 
 function* login(action) {

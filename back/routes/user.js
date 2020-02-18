@@ -51,18 +51,38 @@ router.post('/login', (req, res, next) => {   //POST /api/user/login
     passport.authenticate( 'local', (err, user, info) => {  //done의 첫번째, 두번째, 세번째 인수
         if(err) {
             console.error(err);
-            return nex(err);
+            return next(err);
         }     
         if(info) {
             return res.status(401).send(info.reason);
         }
-        return req.login(user, (loginErr) => {
-            if (loginErr) {
-                return next(loginErr);
+        return req.login(user, async (loginErr) => {
+            try{
+                if (loginErr) {
+                    return next(loginErr);
+                }
+                const fullUser = await db.User.findOne({
+                    where: { id: user.id },
+                    include: [{
+                        model: db.Post,
+                        as: 'Posts',
+                        attributes: ['id']
+                    }, {
+                        model: db.User,
+                        as: 'Followings',
+                        attributes: ['id']
+                    }, {
+                        model: db.User,
+                        as: 'Followers',
+                        attributes: ['id']
+                    }], 
+                    attributes: ['id', 'nickname', 'userId']    //어떤 데이터만 들고올지 정해줌
+                });
+                console.log(fullUser);
+                return res.json(fullUser);  //프론트에 json 형식으로 보내짐
+            } catch(e) {
+                next(e);
             }
-            const filteredUser = Object.assign({}, user.toJSON());
-            delete filteredUser.password;
-            return res.json(filteredUser);
         });
     })(req, res, next);
 });

@@ -21,7 +21,10 @@ passportConfig();
 app.use(morgan('dev')); //요청 들어오는거에 대해 로그가 남음
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
-app.use(cors());
+app.use(cors({
+    origin: true,   //요청 주소와 같게
+    credentials: true
+}));    //쿠키 교환 할 수 있게됨
 app.use(cookieParser(process.env.COOKIE_SECRET));    //secret
 app.use(expressSession({
     resave: false,              //매번 세션 강제 저장
@@ -31,6 +34,7 @@ app.use(expressSession({
         httpOnly: true,
         secure: false,  //https를 쓸 때 true
     },
+    name: 'rnbck',
 }));
 app.use(passport.initialize());
 app.use(passport.session());    //expressSession 밑에 적어야함, expressSession을 내부적으로 사용.
