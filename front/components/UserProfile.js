@@ -24,7 +24,7 @@ const UserProfile = () => {
                 ]}
         >
             <Card.Meta 
-                avatar={<Avatar>{me.nickname[0]}</Avatar>}
+                avatar={<Avatar>{me.nickname}</Avatar>}
                 title={me.nickname}
             />
             <Button onClick={onLogout}>로그아웃</Button>

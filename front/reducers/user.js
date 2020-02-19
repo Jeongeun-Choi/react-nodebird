@@ -1,7 +1,6 @@
 import produce from 'immer';
 
 export const initialState = {
-    isLoggedIn: false,      //로그인 여부
     isLoggingOut: false,    //로그아웃 시도중
     isLoggingIn: false,       //로그인 시도중
     logInErrorReason: '',   //로그인 실패 사유
@@ -67,19 +66,22 @@ export default (state = initialState, action) => {
             }
             case LOG_IN_SUCCESS: {
                 draft.isLoggingIn = false;
-                draft.isLoggedIn = true;
                 draft.me = action.data;
                 draft.isLoading = false;
                 break;
             }
             case LOG_IN_FAILURE: {
                 draft.isLoggingIn = false;
-                draft.isLoggedIn = false;
                 draft.logInErrorReason = action.error;
                 draft.me = null;
                 break;
             }
             case LOG_OUT_REQUEST: {
+                draft.isLoggingOut = true;
+                break;
+            };
+            case LOG_OUT_SUCCESS: {
+                draft.isLoggingOut = false;
                 draft.isLoggedIn = false;
                 draft.me = null;
                 break;
@@ -98,6 +100,16 @@ export default (state = initialState, action) => {
             case SIGN_UP_FAILURE: {
                 draft.isSigningUp = false;
                 draft.signUpErrorReason = action.error;
+                break;
+            }
+            case LOAD_USER_REQUEST: {
+                break;
+            }
+            case LOAD_USER_SUCCESS: {
+                draft.me = action.data;
+                break;
+            }
+            case LOAD_USER_FAILURE: {
                 break;
             }
             default: {
