@@ -5,7 +5,7 @@ const router = express.Router();
 
 router.post('/', async(req, res, next) => {    //POST /api/post
     try{
-        const hashtags = req.body.content.match(/#[^\s]+/g); //정규표현식 알아두면 유용하게 쓰인다
+        const hashtags = req.body.content.match(/#[^\s]+/g); //정규표현식 알아두면 유용하게 쓰인다 , regexr.com 정규표현식 확인 사이트
         const newPost = await db.Post.create({
             content: req.body.content,
             UserId: req.user.id,

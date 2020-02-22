@@ -14,6 +14,9 @@ const PostForm = () => {
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault(); //싱글페이지 어쩌고라서 페이지가 넘어가면 안돼! 그래서 e.preventDefault() 사용
+        if(!text || !text.trim()){
+            return alert('게시글을 작성하세요.');
+        }
         dispatch({
             type: ADD_POST_REQUEST,
             data: {

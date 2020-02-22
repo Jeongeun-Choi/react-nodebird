@@ -124,6 +124,17 @@ const reducer = (state = initialState, action) => {
                 draft.addCommentErrorReason = action.error;
                 break;
             }
+            case LOAD_MAIN_POSTS_REQUEST: {
+                draft.mainPosts = [];
+                break;
+            }
+            case LOAD_MAIN_POSTS_SUCCESS: {
+                draft.mainPosts = action.data;
+                break;
+            }
+            case LOAD_MAIN_POSTS_FAILURE: {
+                break;
+            }
             default:
                 break;
         }
