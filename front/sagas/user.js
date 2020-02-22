@@ -1,6 +1,7 @@
 import { all, delay, fork, takeEvery, put, call } from 'redux-saga/effects';
 import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_FAILURE, SIGN_UP_SUCCESS, LOG_OUT_REQUEST, LOG_OUT_FAILURE, LOG_OUT_SUCCESS, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST} from '../reducers/user';
 import axios from 'axios';
+
 //call은 함수 동기적 호출 => 순서를 무조건! 지켜야할때
 //fork는 함수 비동기적 호출 => 얘 실행해두고 다음꺼 실행해도 될 때 
 //put은 액션 dispatch

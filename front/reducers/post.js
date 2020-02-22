@@ -97,7 +97,7 @@ const reducer = (state = initialState, action) => {
             }
             case ADD_POST_SUCCESS: {
                 draft.isAddingPost = false;
-                draft.mainPosts.unshift(dummyPost);
+                draft.mainPosts.unshift(action.data);
                 draft.postAdded = true;
                 break;
             }
