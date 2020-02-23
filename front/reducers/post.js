@@ -129,10 +129,29 @@ const reducer = (state = initialState, action) => {
                 break;
             }
             case LOAD_MAIN_POSTS_SUCCESS: {
-                draft.mainPosts = action.data;
+                action.data.forEach((d) => {
+                    draft.mainPosts.push(d);
+                })
                 break;
             }
             case LOAD_MAIN_POSTS_FAILURE: {
+                break;
+            }
+            case UPLOAD_IMAGES_REQUEST: {
+                break;
+            }
+            case UPLOAD_IMAGES_SUCCESS: {
+                action.data.forEach((p) => {
+                    draft.imagePaths.push(p);
+                });
+                break;
+            }
+            case UPLOAD_IMAGES_FAILURE: {
+                break;
+            }
+            case REMOVE_IMAGE: {
+                const index = draft.imagePaths.findIndex((v, i) => i === action.index);
+                draft.imagePaths.splice(index, 1);
                 break;
             }
             default:
