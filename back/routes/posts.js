@@ -9,6 +9,8 @@ router.get('/', async(req, res, next) => { //GET /api/posts
             include: [{
                 model: db.User,
                 attributes: ['id', 'nickname'],
+            }, {
+                model: db.Image,
             }],
             order: [['createAt', 'DESC']]   //최신 게시글을 위에 올리고싶을때
         });

@@ -19,7 +19,7 @@ passportConfig();
 
 //use쓰면 뭐 미들웨어? 사용 할 수 있다
 app.use(morgan('dev')); //요청 들어오는거에 대해 로그가 남음
-app.use('/', express.static('uploads'));
+app.use('/', express.static('uploads'));    //uploads 폴더를 루트 폴더인것처럼 쓸 수 있다.
 app.use(express.json());
 app.use(express.urlencoded({extended: true}));
 app.use(cors({

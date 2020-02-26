@@ -4,6 +4,7 @@ import PropTypes from 'prop-types';
 import Link from 'next/link';
 import { useSelector, useDispatch } from 'react-redux';
 import { ADD_COMMENT_REQUEST } from '../reducers/post';
+import PostImages from './PostImages';
 
 const PostCard = ({post}) => {
     const [commentFormOpened, setCommentFormOpened] = useState(false);
@@ -41,7 +42,7 @@ const PostCard = ({post}) => {
     <div>
         <Card
             key={+post.createdAt}
-            cover={post.img && <img alt="example" src={post.img} />}
+            cover={post.Images && <PostImages images={post.Images}/>}
             actions={[
                 <Icon type="retweet" key="retweet" />,
                 <Icon type="heart" key="heart" />,
