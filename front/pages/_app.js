@@ -9,7 +9,7 @@ import reducer from '../reducers';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from '../sagas';
 
-const NodeBird = ({ Component, store }) => {
+const NodeBird = ({ Component, store, pageProps }) => {
     return(
         <Provider store={store}>
             <Head>
@@ -17,7 +17,7 @@ const NodeBird = ({ Component, store }) => {
                 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/antd/3.16.2/antd.css" />
             </Head>
             <AppLayout>
-                <Component />
+                <Component {...pageProps}/>   {/*pages 이다. */}
             </AppLayout>
         </Provider>
     );
@@ -27,6 +27,20 @@ const NodeBird = ({ Component, store }) => {
 NodeBird.PropTypes = {
     Component: PropTypes.elementType.isRequired,
     store: PropTypes.object.isRequired,
+    pageProps: PropTypes.object.isRequired
+};
+
+//App에서 context를 내려준다. 참고로 context는 next에서 내려준다.
+//context안에 ctx, Component가 포함된다. 
+//페이지 안에 getInitialProps가 있으면 해당 페이지 안에 있는 getInitialProps가 실행된다.
+NodeBird.getInitialProps = async(context) => {
+    console.log(context);
+    const {ctx, Component} = context;
+    let pageProps = {};
+    if (Component.getInitialProps){
+        pageProps = await context.Component.getInitialProps(ctx);  //NodeBird의 <Component/>와 같은 친구이다.
+    }
+    return { pageProps };
 };
 
 const configureStore = (initialState, options) => {

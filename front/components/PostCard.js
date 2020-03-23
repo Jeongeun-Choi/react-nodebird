@@ -42,7 +42,7 @@ const PostCard = ({post}) => {
     <div>
         <Card
             key={+post.createdAt}
-            cover={post.Images && <PostImages images={post.Images}/>}
+            // cover={post.Images && <PostImages images={post.Images}/>}
             actions={[
                 <Icon type="retweet" key="retweet" />,
                 <Icon type="heart" key="heart" />,
@@ -54,10 +54,11 @@ const PostCard = ({post}) => {
             <Card.Meta
                 avatar={<Avatar>{post.User.nickname[0]}</Avatar>}
                 title={post.User.nickname}
+                // 정규 표현식을 사용하여 split으로 나눠준다. #어쩌고 일경우 링크 달아주고 아닌 경우엔 그냥 출력
                 description={(<div>{post.content.split(/(#[^\s]+)/g).map((v) => {
                     if(v.match(/#[^\s]+/)){
                         return(
-                            <Link href="/hashtag"><a>{v}</a></Link>
+                            <Link href={`/hashtag/${v.slice(1)}`}><a>{v}</a></Link>
                         );
                     };
                     return v;

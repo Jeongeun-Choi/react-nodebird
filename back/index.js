@@ -10,6 +10,7 @@ const db = require('./models');
 const userAPIRouter = require('./routes/user'); //라우터 합침
 const postAPIRouter = require('./routes/post');
 const postsAPIRouter = require('./routes/posts');
+const hashtagAPIRouter = require('./routes/hashtag');
 const passport = require('passport');
 
 dotenv.config();
@@ -46,6 +47,7 @@ app.use(passport.session());    //expressSession 밑에 적어야함, expressSes
 app.use('/api/user', userAPIRouter);
 app.use('/api/post', postAPIRouter);
 app.use('/api/posts', postsAPIRouter);
+app.use('/api/hashtag', hashtagAPIRouter);
 
 app.listen(3065, ()=>{
     console.log('server is running on http://localhost:3065');

@@ -1,4 +1,5 @@
 //express랑 next랑 연결
+//api/hashtag/:hash 처럼 동적 데이터들을 불러오기 위해서 연결했다
 const express = require('express');
 const next = require('next');
 const morgan = require('morgan');
@@ -29,6 +30,15 @@ app.prepare().then(()=>{
             secure: false
         },
     }));
+
+    server.get('/hashtag/:tag', (req, res) => {
+        return app.render(req, res, '/hashtag', { tag: req.params.tag});
+        //주소는 /hashtag/:tag 지만 실제로 출력할 화면은 /hashtag 페이지이다.
+    });
+
+    server.get('/user/:id', (req, res) => {
+        return app.render(req, res, '/user', {id:req.params.id});
+    });
 
     //모든 get 요청을 여기서 처리하겠다!
     server.get('*', (req, res) => {
