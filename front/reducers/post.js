@@ -45,9 +45,9 @@ export const ADD_COMMENT_REQUEST = 'ADD_COMMENT_REQUEST';
 export const ADD_COMMENT_SUCCESS = 'ADD_COMMENT_SUCCESS';
 export const ADD_COMMENT_FAILURE = 'ADD_COMMENT_FAILURE';
 
-export const LOAD_COMMENT_REQUEST = 'LOAD_COMMENT_REQUEST';
-export const LOAD_COMMENT_SUCCESS = 'LOAD_COMMENT_SUCCESS';
-export const LOAD_COMMENT_FAILURE = 'LOAD_COMMENT_FAILURE';
+export const LOAD_COMMENTS_REQUEST = 'LOAD_COMMENTS_REQUEST';
+export const LOAD_COMMENTS_SUCCESS = 'LOAD_COMMENTS_SUCCESS';
+export const LOAD_COMMENTS_FAILURE = 'LOAD_COMMENTS_FAILURE';
 
 export const RETWEET_REQUEST = 'RETWEET_REQUEST';
 export const RETWEET_SUCCESS = 'RETWEET_SUCCESS';
@@ -96,17 +96,28 @@ const reducer = (state = initialState, action) => {
                 draft.addCommentErrorReason = action.error;
                 break;
             }
-            case LOAD_MAIN_POSTS_REQUEST: {
+            case LOAD_COMMENTS_SUCCESS: {
+                const postIndex = draft.mainPosts.findIndex(v => v.id === action.data.postId);
+                draft.mainPosts[postIndex].Comments = action.data.comments;
+                break;
+            }
+            case LOAD_MAIN_POSTS_REQUEST:
+            case LOAD_HASHTAG_POSTS_REQUEST:
+            case LOAD_USER_POSTS_REQUEST: {
                 draft.mainPosts = [];
                 break;
             }
-            case LOAD_MAIN_POSTS_SUCCESS: {
+            case LOAD_MAIN_POSTS_SUCCESS:
+            case LOAD_HASHTAG_POSTS_SUCCESS:
+            case LOAD_USER_POSTS_SUCCESS: {
                 action.data.forEach((d) => {
                     draft.mainPosts.push(d);
                 })
                 break;
             }
-            case LOAD_MAIN_POSTS_FAILURE: {
+            case LOAD_MAIN_POSTS_FAILURE:
+            case LOAD_HASHTAG_POSTS_FAILURE:    
+            case LOAD_USER_POSTS_FAILURE: {
                 break;
             }
             case UPLOAD_IMAGES_REQUEST: {

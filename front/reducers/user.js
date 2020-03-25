@@ -4,7 +4,7 @@ export const initialState = {
     isLoggingOut: false,    //로그아웃 시도중
     isLoggingIn: false,       //로그인 시도중
     logInErrorReason: '',   //로그인 실패 사유
-    signedUp: false,        //회원가입 성공
+    isSignedUp: false,        //회원가입 성공
     isSigningUp: false,     //회원가입 시도중
     signUpErrorReason: '',  //회원가입 실패 사유
     me: null,               //내 정보
@@ -57,7 +57,7 @@ export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
 export default (state = initialState, action) => {
-    return produce(state, draft => {
+    return produce(state, (draft) => {
         switch(action.type){
             case LOG_IN_REQUEST: { 
                 draft.isLoggingIn = true;
@@ -67,7 +67,7 @@ export default (state = initialState, action) => {
             case LOG_IN_SUCCESS: {
                 draft.isLoggingIn = false;
                 draft.me = action.data;
-                draft.isLoading = false;
+                draft.logInErrorReason = '';
                 break;
             }
             case LOG_IN_FAILURE: {
@@ -82,7 +82,6 @@ export default (state = initialState, action) => {
             };
             case LOG_OUT_SUCCESS: {
                 draft.isLoggingOut = false;
-                draft.isLoggedIn = false;
                 draft.me = null;
                 break;
             }
@@ -108,9 +107,9 @@ export default (state = initialState, action) => {
             case LOAD_USER_SUCCESS: {
                 if(action.me){
                     draft.me = action.data;
-                } else{
-                    draft.userInfo = action.data;
-                }
+                    break;
+                } 
+                draft.userInfo = action.data;
                 break;
             }
             case LOAD_USER_FAILURE: {

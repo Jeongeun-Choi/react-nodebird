@@ -19,7 +19,7 @@ const User = ({id}) => {
         });
         dispatch({
             type: LOAD_USER_POSTS_REQUEST,
-            data: IDBCursor,
+            data: id,
         });
     }, []);
 

@@ -12,7 +12,7 @@ const router = express.Router();
 //공통된 부분 제거 ex) /api/user
 //API는 다른 서비스가 내 서비스의 기능을 실행할 수 있게 열어둔 창구 
 router.get('/', (req, res) => {     // /api/user/
-    if(req.user){
+    if(!req.user){
         return res.status(401).send('로그인이 필요합니다.');
     }
     const user = Object.assign({}, req.user.toJSON());

@@ -24,7 +24,7 @@ const NodeBird = ({ Component, store, pageProps }) => {
 
 };
 
-NodeBird.PropTypes = {
+NodeBird.propTypes = {
     Component: PropTypes.elementType.isRequired,
     store: PropTypes.object.isRequired,
     pageProps: PropTypes.object.isRequired
@@ -38,7 +38,7 @@ NodeBird.getInitialProps = async(context) => {
     const {ctx, Component} = context;
     let pageProps = {};
     if (Component.getInitialProps){
-        pageProps = await context.Component.getInitialProps(ctx);  //NodeBird의 <Component/>와 같은 친구이다.
+        pageProps = await Component.getInitialProps(ctx);  //NodeBird의 <Component/>와 같은 친구이다.
     }
     return { pageProps };
 };

@@ -1,4 +1,4 @@
-import { all, delay, fork, takeEvery, put, call } from 'redux-saga/effects';
+import { all, fork, takeEvery, put, call } from 'redux-saga/effects';
 import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_FAILURE, SIGN_UP_SUCCESS, LOG_OUT_REQUEST, LOG_OUT_FAILURE, LOG_OUT_SUCCESS, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST} from '../reducers/user';
 import axios from 'axios';
 
@@ -102,7 +102,6 @@ function loadUserAPI(userId) {
 
 function* loadUser(action) {
     try{
-        // yield call(loadUserAPI);
         const result = yield call(loadUserAPI, action.data); //call 함수는 첫번째는 함수 두번째는 인자
         yield put({
             type: LOAD_USER_SUCCESS,
