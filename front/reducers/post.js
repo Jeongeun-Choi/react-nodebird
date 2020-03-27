@@ -160,6 +160,16 @@ const reducer = (state = initialState, action) => {
             case UNLIKE_POST_FAILURE: {
                 break;
             }
+            case RETWEET_REQUEST: {
+                break;
+            }
+            case RETWEET_SUCCESS: {
+                draft.mainPosts.unshift(action.data);
+                break;
+            }
+            case RETWEET_FAILURE: {
+                break;
+            }
             default:
                 break;
         }
