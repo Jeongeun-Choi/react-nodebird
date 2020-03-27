@@ -11,6 +11,11 @@ router.get('/', async(req, res, next) => { //GET /api/posts
                 attributes: ['id', 'nickname'],
             }, {
                 model: db.Image,
+            }, {
+                model: db.User,
+                through: 'Like',
+                as: 'Likers',
+                attributes: ['id'],
             }],
             order: [['createdAt', 'DESC']]   //최신 게시글을 위에 올리고싶을때
         });
