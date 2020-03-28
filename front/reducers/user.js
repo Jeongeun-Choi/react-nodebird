@@ -115,6 +115,32 @@ export default (state = initialState, action) => {
             case LOAD_USER_FAILURE: {
                 break;
             }
+            case FOLLOW_USER_REQUEST: {
+                break;
+            }
+            case FOLLOW_USER_SUCCESS: {
+                draft.me.Followings.unshift({id: action.data});
+                break;
+            }
+            case FOLLOW_USER_FAILURE: {
+                break;
+            }
+            case UNFOLLOW_USER_REQUEST: {
+                break;
+            }
+            case UNFOLLOW_USER_SUCCESS: {
+                const index = draft.me.Followings.findIndex(v => v.id === action.data);
+                draft.me.Followings.splice(index, 1);
+                const index2 = draft.me.followingList.findIndex(v => v.id === action.data);
+                draft.me.followingList.splice(index2, 1);
+            }
+            case UNFOLLOW_USER_FAILURE: {
+                break;
+            }
+            case ADD_POST_TO_ME: {
+                draft.me.Posts.unshift({id: action.data})
+                break;
+            }
             default: {
                 break;
             }

@@ -1,6 +1,7 @@
 import { all, fork, takeLatest, put, call } from 'redux-saga/effects';
 import { UNLIKE_POST_FAILURE, UNLIKE_POST_SUCCESS, UNLIKE_POST_REQUEST, LIKE_POST_SUCCESS, LIKE_POST_REQUEST, LIKE_POST_FAILURE, ADD_POST_FAILURE, ADD_POST_REQUEST, ADD_POST_SUCCESS, ADD_COMMENT_FAILURE, ADD_COMMENT_REQUEST, ADD_COMMENT_SUCCESS, LOAD_MAIN_POSTS_SUCCESS, LOAD_MAIN_POSTS_FAILURE, LOAD_MAIN_POSTS_REQUEST, UPLOAD_IMAGES_SUCCESS, UPLOAD_IMAGES_FAILURE, UPLOAD_IMAGES_REQUEST, LOAD_HASHTAG_POSTS_SUCCESS, LOAD_HASHTAG_POSTS_FAILURE, LOAD_USER_POSTS_SUCCESS, LOAD_USER_POSTS_FAILURE, LOAD_USER_POSTS_REQUEST, LOAD_HASHTAG_POSTS_REQUEST, LOAD_COMMENTS_SUCCESS, LOAD_COMMENTS_REQUEST, RETWEET_SUCCESS, RETWEET_FAILURE, RETWEET_REQUEST } from '../reducers/post';
 import axios from 'axios';
+import {ADD_POST_TO_ME} from '../reducers/user';
 
 function addPostAPI(postData){
     return axios.post('/post', postData, {
@@ -11,9 +12,13 @@ function addPostAPI(postData){
 function* addPost(action){
     try{
         const result = yield call(addPostAPI, action.data)
-        yield put({
+        yield put({ //post reducer의 데이터를 수정
             type: ADD_POST_SUCCESS,
             data: result.data,
+        });
+        yield put({ //user reducer의 데이터를 수정
+            type: ADD_POST_TO_ME,
+            data: result.data.id,
         });
     } catch (e) {
         yield put({

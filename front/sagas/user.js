@@ -1,5 +1,5 @@
 import { all, fork, takeEvery, put, call } from 'redux-saga/effects';
-import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_FAILURE, SIGN_UP_SUCCESS, LOG_OUT_REQUEST, LOG_OUT_FAILURE, LOG_OUT_SUCCESS, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST} from '../reducers/user';
+import { LOG_IN_REQUEST, LOG_IN_SUCCESS, LOG_IN_FAILURE, SIGN_UP_REQUEST, SIGN_UP_FAILURE, SIGN_UP_SUCCESS, LOG_OUT_REQUEST, LOG_OUT_FAILURE, LOG_OUT_SUCCESS, LOAD_USER_SUCCESS, LOAD_USER_FAILURE, LOAD_USER_REQUEST, FOLLOW_USER_REQUEST, FOLLOW_USER_FAILURE, FOLLOW_USER_SUCCESS, UNFOLLOW_USER_REQUEST, UNFOLLOW_USER_FAILURE, UNFOLLOW_USER_SUCCESS} from '../reducers/user';
 import axios from 'axios';
 
 //call은 함수 동기적 호출 => 순서를 무조건! 지켜야할때
@@ -99,7 +99,6 @@ function loadUserAPI(userId) {
         withCredentials: true,
     });
 }
-
 function* loadUser(action) {
     try{
         const result = yield call(loadUserAPI, action.data); //call 함수는 첫번째는 함수 두번째는 인자
@@ -116,16 +115,68 @@ function* loadUser(action) {
         });
     }
 }
-
 function* watchLoadUser() {
     yield takeEvery(LOAD_USER_REQUEST, loadUser);
 }
 
+function followAPI(userId) {
+    //서버에 요청을 보내는 부분
+    //userId가 있으면 남, 없으면 자신
+    return axios.post(`/user/${userId}/follow`, {}, {
+        withCredentials: true,
+    });
+}
+function* follow(action) {
+    try{
+        const result = yield call(followAPI, action.data); //call 함수는 첫번째는 함수 두번째는 인자
+        yield put({
+            type: FOLLOW_USER_SUCCESS,
+            data: result.data,
+        });
+    }catch (e) {
+        console.error(e);
+        yield put({
+            type: FOLLOW_USER_FAILURE,
+            error: e
+        });
+    }
+}
+function* watchFollow() {
+    yield takeEvery(FOLLOW_USER_REQUEST, follow);
+}
+
+function unfollowAPI(userId) {
+    //서버에 요청을 보내는 부분
+    //userId가 있으면 남, 없으면 자신
+    return axios.delete(`/user/${userId}/follow`, {},{
+        withCredentials: true,
+    });
+}
+function* unfollow(action) {
+    try{
+        const result = yield call(unfollowAPI, action.data); //call 함수는 첫번째는 함수 두번째는 인자
+        yield put({
+            type: UNFOLLOW_USER_SUCCESS,
+            data: result.data,
+        });
+    }catch (e) {
+        console.error(e);
+        yield put({
+            type: UNFOLLOW_USER_FAILURE,
+            error: e
+        });
+    }
+}
+function* watchUnfollow() {
+    yield takeEvery(UNFOLLOW_USER_REQUEST, unfollow);
+}
 export default function* userSaga() {
     yield all([
         fork(watchLogIn),
         fork(watchLogOut),
         fork(watchLoadUser),
         fork(watchSignUp),
+        fork(watchFollow),
+        fork(watchUnfollow),
     ]);
 }
