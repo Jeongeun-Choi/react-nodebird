@@ -91,9 +91,9 @@ function loadMainPostsAPI(){
     return axios.get('/posts');
 }
 
-function* loadMainPosts(action){
+function* loadMainPosts(){
     try{
-        const result = yield call(loadMainPostsAPI, action.data);
+        const result = yield call(loadMainPostsAPI);
         yield put({
             type: LOAD_MAIN_POSTS_SUCCESS,
             data: result.data,

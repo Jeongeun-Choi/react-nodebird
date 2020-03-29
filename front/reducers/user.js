@@ -11,14 +11,8 @@ export const initialState = {
     followingList: [],      //팔로잉 리스트
     followerList: [],       //팔로워 리스트
     userInfo: null,         //남의 정보
-};
-
-const dummyUser = {
-    nickname: '정은',
-    Post: [],
-    Followings: [],
-    Followers: [],
-    id: 1,
+    isEditingNickname: '',  //이름 변경 중
+    editNicknameErrorReason: '',    //이름 변경 실패 사유
 };
 
 //밑에 애들(REQUEST, SUCCESS, FAILURE)은 서버쪽에 갔다와야하는 비동기 액션 => 리덕스 사가 써라
@@ -38,9 +32,13 @@ export const LOG_OUT_REQUEST = 'LOG_OUT_REQUEST';
 export const LOG_OUT_SUCCESS = 'LOG_OUT_SUCCESS';
 export const LOG_OUT_FAILURE = 'LOG_OUT_FAILURE';
 
-export const LOAD_FOLLOW_REQUEST = 'LOAD_FOLLOW_REQUEST';
-export const LOAD_FOLLOW_SUCCESS = 'LOAD_FOLLOW_SUCCESS';
-export const LOAD_FOLLOW_FAILURE = 'LOAD_FOLLOW_FAILURE';
+export const LOAD_FOLLOWERS_REQUEST = 'LOAD_FOLLOWERS_REQUEST';
+export const LOAD_FOLLOWERS_SUCCESS = 'LOAD_FOLLOWERS_SUCCESS';
+export const LOAD_FOLLOWERS_FAILURE = 'LOAD_FOLLOWERS_FAILURE';
+
+export const LOAD_FOLLOWINGS_REQUEST = 'LOAD_FOLLOWINGS_REQUEST';
+export const LOAD_FOLLOWINGS_SUCCESS = 'LOAD_FOLLOWINGS_SUCCESS';
+export const LOAD_FOLLOWINGS_FAILURE = 'LOAD_FOLLOWINGS_FAILURE';
 
 export const FOLLOW_USER_REQUEST = 'FOLLOW_USER_REQUEST';
 export const FOLLOW_USER_SUCCESS = 'FOLLOW_USER_SUCCESS';
@@ -53,6 +51,10 @@ export const UNFOLLOW_USER_FAILURE = 'UNFOLLOW_USER_FAILURE';
 export const REMOVE_FOLLOWER_REQUEST = 'REMOVE_FOLLOWER_REQUEST';
 export const REMOVE_FOLLOWER_SUCCESS = 'REMOVE_FOLLOWER_SUCCESS';
 export const REMOVE_FOLLOWER_FAILURE = 'REMOVE_FOLLOWER_FAILURE';
+
+export const EDIT_NICKNAME_REQUEST = 'EDIT_NICKNAME_REQUEST';
+export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
+export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
 
@@ -131,14 +133,63 @@ export default (state = initialState, action) => {
             case UNFOLLOW_USER_SUCCESS: {
                 const index = draft.me.Followings.findIndex(v => v.id === action.data);
                 draft.me.Followings.splice(index, 1);
-                const index2 = draft.me.followingList.findIndex(v => v.id === action.data);
-                draft.me.followingList.splice(index2, 1);
+                const index2 = draft.followingList.findIndex(v => v.id === action.data);
+                draft.followingList.splice(index2, 1);
             }
             case UNFOLLOW_USER_FAILURE: {
                 break;
             }
             case ADD_POST_TO_ME: {
                 draft.me.Posts.unshift({id: action.data})
+                break;
+            }
+            case LOAD_FOLLOWERS_REQUEST: {
+                break;
+            }
+            case LOAD_FOLLOWERS_SUCCESS: {
+                action.data.forEach(d => {
+                    draft.followerList.push(d);
+                });
+                break;
+            }
+            case LOAD_FOLLOWERS_FAILURE: {
+                break;
+            }
+            case LOAD_FOLLOWINGS_REQUEST: {
+                break;
+            }
+            case LOAD_FOLLOWINGS_SUCCESS: {
+                action.data.forEach(d => {
+                    draft.followingList.push(d);
+                });
+                break;
+            }
+            case LOAD_FOLLOWINGS_FAILURE: {
+                break;
+            }
+            case REMOVE_FOLLOWER_REQUEST: {
+                break;
+            }
+            case REMOVE_FOLLOWER_SUCCESS: {
+                draft.me.Followers.filter(v => v.id !== action.data);
+                draft.followerList.filter(v => v.id !== action.data);
+                break;
+            }
+            case REMOVE_FOLLOWER_FAILURE: {
+                break;
+            }
+            case EDIT_NICKNAME_REQUEST: {
+                draft.isEditingNickname = true;
+                draft.editNicknameErrorReason = '';
+                break;
+            }
+            case EDIT_NICKNAME_SUCCESS: {
+                draft.isEditingNickname = false;
+                draft.me.nickname = action.data;
+                break;
+            }
+            case EDIT_NICKNAME_FAILURE: {
+                draft.editNicknameErrorReason = action.data;
                 break;
             }
             default: {

@@ -7,7 +7,6 @@ import { Avatar, Card } from 'antd';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 
 const User = ({id}) => {
-    console.log(id);
     const dispatch = useDispatch();
     const {mainPosts} = useSelector(state => state.post);
     const {userInfo} = useSelector(state => state.user);
