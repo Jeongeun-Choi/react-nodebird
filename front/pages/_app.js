@@ -2,12 +2,15 @@ import React from 'react';
 import Head from 'next/head';
 import PropTypes from 'prop-types';
 import withRedux from 'next-redux-wrapper';
+import withReduxSaga from 'next-redux-saga';    //next용 redux saga
 import AppLayout from '../components/AppLayout';
 import { createStore, compose, applyMiddleware } from 'redux';
 import { Provider } from 'react-redux';
 import reducer from '../reducers';
 import createSagaMiddleware from 'redux-saga';
 import rootSaga from '../sagas';
+import { LOAD_USER_REQUEST } from '../reducers/user';
+import axios from 'axios';
 
 const NodeBird = ({ Component, store, pageProps }) => {
     return(
@@ -39,6 +42,17 @@ NodeBird.getInitialProps = async(context) => {
     console.log(context);
     const {ctx, Component} = context;
     let pageProps = {};
+    const state = ctx.store.getState();
+    const cookie = ctx.isServer ? ctx.req.headers.cookie : '';  //서버 환경일때만 들어가 있다. 
+    console.log('cookie', cookie);
+    if(ctx.isServer && cookie){ //서버인지 클라이언튼지 검사
+        axios.defaults.headers.Cookie = cookie; //서버쪽에 쿠키를 넣어주는 방법
+    }
+    if(!state.user.me){
+        ctx.store.dispatch({
+            type: LOAD_USER_REQUEST,
+        });
+    }
     if (Component.getInitialProps){
         pageProps = await Component.getInitialProps(ctx);  //NodeBird의 <Component/>와 같은 친구이다.
     }
@@ -55,8 +69,9 @@ const configureStore = (initialState, options) => {
         !options.isServer && typeof window.__REDUX_DEVTOOLS_EXTENSION__ !== 'underfined' ? window.__REDUX_DEVTOOLS_EXTENSION__() : (f) => f,
     );
     const store = createStore(reducer, initialState, enhancer);
+    store.sagaTask = sagaMiddleware.run(rootSaga);
     sagaMiddleware.run(rootSaga);
     return store;
 };
 
-export default withRedux(configureStore)(NodeBird);
+export default withRedux(configureStore)(withReduxSaga(NodeBird));

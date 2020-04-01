@@ -10,11 +10,6 @@ const Home = () => {
     const { mainPosts } = useSelector(state => state.post);
     const dispatch = useDispatch();
 
-    useEffect(()=>{
-        dispatch({
-            type: LOAD_MAIN_POSTS_REQUEST,
-        });
-    }, []);
     return(
     <div>
         {me && <PostForm />}
@@ -25,6 +20,15 @@ const Home = () => {
         })}
     </div>
     );
+};
+
+//console.log(Object.keys(context)) 해서 가져온 키들 중
+//store는 redux store 이 안에는 dispatch, getstate=>redux의 state를 가져올 수 있다. 
+Home.getInitialProps = async (context) => {
+    console.log(Object.keys(context));
+    context.store.dispatch({
+        type: LOAD_MAIN_POSTS_REQUEST,
+    });
 };
 
 export default Home;
