@@ -136,7 +136,7 @@ function* watchUploadImages() {
 }
 
 function loadHashtagPostsAPI(tag){
-    return axios.get(`/hashtag/${tag}`);
+    return axios.get(`/hashtag/${encodeURIComponent(tag)}`);
 }
 
 function* loadHashtagPosts(action){
@@ -159,7 +159,7 @@ function* watchLoadHashtagPosts() {
 }
 
 function loadUserPostsAPI(id){
-    return axios.get(`/user/${id}/posts`);
+    return axios.get(`/user/${id || 0}/posts`);
 }
 
 function* loadUserPosts(action){

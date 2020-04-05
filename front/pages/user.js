@@ -6,21 +6,9 @@ import PostCard from '../components/PostCard';
 import { Avatar, Card } from 'antd';
 import { LOAD_USER_REQUEST } from '../reducers/user';
 
-const User = ({id}) => {
-    const dispatch = useDispatch();
+const User = () => {
     const {mainPosts} = useSelector(state => state.post);
     const {userInfo} = useSelector(state => state.user);
-
-    useEffect(() => {
-        dispatch({
-            type: LOAD_USER_REQUEST,
-            data: id,
-        });
-        dispatch({
-            type: LOAD_USER_POSTS_REQUEST,
-            data: id,
-        });
-    }, []);
 
     return (
         <div>
@@ -58,8 +46,17 @@ User.propTypes = {
 //프론트에선 next router로 페이지를 넘나들때
 //필요한 데이터를 서버에서 미리 불러와서 프론트에 렌더링 가능
 User.getInitialProps = async(context) =>{
+    const id = parseInt(context.query.id, 10);
     console.log('User getInitialProps', context.query.id);
-    return {id: parseInt(context.query.id, 10)}
+    context.store.dispatch({
+        type: LOAD_USER_REQUEST,
+        data: id,
+    });
+    context.store.dispatch({
+        type: LOAD_USER_POSTS_REQUEST,
+        data: id,
+    });
+    return {id};
 };
 
 export default User;

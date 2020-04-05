@@ -61,7 +61,10 @@ NodeBird.getInitialProps = async(context) => {
 
 const configureStore = (initialState, options) => {
     const sagaMiddleware = createSagaMiddleware();
-    const middlewares = [sagaMiddleware];
+    const middlewares = [sagaMiddleware, (store) => (next) => (action) => { // 리덕스 사가 에러 찾는 방식
+        console.log(action);
+        next(action);
+    }];
     const enhancer = process.env.NODE_ENV === 'production' 
     ? compose(applyMiddleware(...middlewares))
     :compose(

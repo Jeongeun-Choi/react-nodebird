@@ -6,15 +6,7 @@ import PostCard from '../components/PostCard';
 
 const Hashtag = ({tag}) => {
     console.log(tag)
-    const dispatch = useDispatch();
     const {mainPosts} = useSelector(state => state.post);
-
-    useEffect(() => {
-        dispatch({
-            type: LOAD_HASHTAG_POSTS_REQUEST,
-            data: tag,
-        });
-    }, []);
 
     return (
         <div>
@@ -32,8 +24,13 @@ Hashtag.propTypes = {
 //프론트에서도 실행, 백에서도 실행
 //필요한 데이터를 서버에서 미리 불러와서 프론트에 렌더링 가능
 Hashtag.getInitialProps = async(context) =>{
-    console.log('hashtag getInitialProps', context.query.tag);
-    return {tag: context.query.tag};
+    const tag = context.query.tag
+    console.log('hashtag getInitialProps', tag);
+    context.store.dispatch({
+        type: LOAD_HASHTAG_POSTS_REQUEST,
+        data: tag,
+    })
+    return {tag};
 };
 
 export default Hashtag;

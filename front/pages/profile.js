@@ -1,4 +1,4 @@
-import React, { useEffect, useCallback } from 'react';
+import React, {  useCallback } from 'react';
 import { Form, Button, List, Card, Icon } from 'antd';
 import {useSelector, useDispatch} from 'react-redux';
 import NicknameEditForm from '../components/NicknameEditForm';
@@ -7,26 +7,9 @@ import { LOAD_FOLLOWERS_REQUEST, LOAD_FOLLOWINGS_REQUEST, REMOVE_FOLLOWER_REQUES
 import { LOAD_USER_POSTS_REQUEST } from '../reducers/post';
 
 const Profile = () =>{
-    const dispatch = useDispatch();
     const {me, followingList, followerList} = useSelector(state => state.user);
     const {mainPosts} = useSelector(state => state.post);
-
-    useEffect(() => {
-        if (me){
-            dispatch({
-                type: LOAD_FOLLOWERS_REQUEST,
-                data: me.id,
-            });
-            dispatch({
-                type: LOAD_FOLLOWINGS_REQUEST,
-                data: me.id,
-            });
-            dispatch({
-                type: LOAD_USER_POSTS_REQUEST,
-                data: me.id,
-            });
-        } 
-    }, [me&&me.id]);
+    const dispatch = useDispatch();
 
     const onUnfollow = useCallback(userId => () => {
         dispatch({
@@ -86,4 +69,22 @@ const Profile = () =>{
     )
 };
 
+Profile.getInitialProps = async(context) => {
+    const state = context.store.getState();
+    // 이 직전에 LOAD_USERS_REQUEST
+    context.store.dispatch({
+        type: LOAD_FOLLOWERS_REQUEST,
+        data: state.user.me && state.user.me.id,
+    });
+    context.store.dispatch({
+        type: LOAD_FOLLOWINGS_REQUEST,
+        data: state.user.me && state.user.me.id,
+    });
+    context.store.dispatch({
+        type: LOAD_USER_POSTS_REQUEST,
+        data: state.user.me && state.user.me.id,
+    });
+
+    // 이 쯤에서 LOAD_USERS_SUCCESS 돼서 me가 생김.
+}
 export default Profile;
