@@ -12,7 +12,7 @@ const PostForm = () => {
 
     useEffect(() => {
         setText('')
-    }, [postAdded === true]);
+    }, [postAdded]);
 
     const onSubmitForm = useCallback((e) => {
         e.preventDefault(); //싱글페이지 어쩌고라서 페이지가 넘어가면 안돼! 그래서 e.preventDefault() 사용

@@ -174,7 +174,8 @@ const reducer = (state = initialState, action) => {
                 break;
             }
             case REMOVE_POST_SUCCESS: {
-                draft.mainPosts.filter(v => v.id !== action.data);
+                const index = draft.mainPosts.findIndex(v => v.id === action.data.userId);
+                draft.mainPosts.splice(index, 1);
                 break;
             }
             case REMOVE_POST_FAILURE: {

@@ -70,6 +70,7 @@ router.post('/images', upload.array('image'), (req, res) => {
 
 router.delete('/:id', isLoggedIn, async (req, res, next) => {
     try{
+        const post = await db.Post.findOne({where: {id: req.params.id}});
         if(!post) {
             return res.status(404).send('포스트가 존재하지 않습니다.');
         }
