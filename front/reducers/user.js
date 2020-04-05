@@ -57,6 +57,7 @@ export const EDIT_NICKNAME_SUCCESS = 'EDIT_NICKNAME_SUCCESS';
 export const EDIT_NICKNAME_FAILURE = 'EDIT_NICKNAME_FAILURE';
 
 export const ADD_POST_TO_ME = 'ADD_POST_TO_ME';
+export const REMOVE_POST_OF_ME = 'REMOVE_POST_OF_ME';
 
 export default (state = initialState, action) => {
     return produce(state, (draft) => {
@@ -140,7 +141,11 @@ export default (state = initialState, action) => {
                 break;
             }
             case ADD_POST_TO_ME: {
-                draft.me.Posts.unshift({id: action.data})
+                draft.me.Posts.unshift({id: action.data});
+                break;
+            }
+            case REMOVE_POST_OF_ME: {
+                draft.me.Posts.filter(v => v.id !== action.data);
                 break;
             }
             case LOAD_FOLLOWERS_REQUEST: {

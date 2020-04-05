@@ -170,6 +170,16 @@ const reducer = (state = initialState, action) => {
             case RETWEET_FAILURE: {
                 break;
             }
+            case REMOVE_POST_REQUEST: {
+                break;
+            }
+            case REMOVE_POST_SUCCESS: {
+                draft.mainPosts.filter(v => v.id !== action.data);
+                break;
+            }
+            case REMOVE_POST_FAILURE: {
+                break;
+            }
             default:
                 break;
         }
