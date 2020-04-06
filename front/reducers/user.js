@@ -13,6 +13,8 @@ export const initialState = {
     userInfo: null,         //남의 정보
     isEditingNickname: '',  //이름 변경 중
     editNicknameErrorReason: '',    //이름 변경 실패 사유
+    hasMoreFollower: false,
+    hasMoreFollowing: false,
 };
 
 //밑에 애들(REQUEST, SUCCESS, FAILURE)은 서버쪽에 갔다와야하는 비동기 액션 => 리덕스 사가 써라
@@ -149,6 +151,8 @@ export default (state = initialState, action) => {
                 break;
             }
             case LOAD_FOLLOWERS_REQUEST: {
+                draft.hasMoreFollower = action.offset ? draft.hasMoreFollower : true;   // 처음 데이터를 가져올 때는 더보기 버튼을 보여주는 걸로
+                draft.hasMoreFollower = action.data.length === 3;
                 break;
             }
             case LOAD_FOLLOWERS_SUCCESS: {
@@ -161,6 +165,8 @@ export default (state = initialState, action) => {
                 break;
             }
             case LOAD_FOLLOWINGS_REQUEST: {
+                draft.hasMoreFollowing = action.offset ? draft.hasMoreFollowing : true; 
+                draft.hasMoreFollowing = action.data.length === 3;
                 break;
             }
             case LOAD_FOLLOWINGS_SUCCESS: {

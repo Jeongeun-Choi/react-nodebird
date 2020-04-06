@@ -171,16 +171,18 @@ function* watchUnfollow() {
     yield takeEvery(UNFOLLOW_USER_REQUEST, unfollow);
 }
 
-function loadFollowersAPI(userId) {
+function loadFollowersAPI(userId, offset = 0, limit = 3) {
     //서버에 요청을 보내는 부분
     //userId가 있으면 남, 없으면 자신
-    return axios.get(`/user/${userId || 0}/followers`,{
+    //주소체계를 안바꾸고 서버로 추가적인 데이터를 보내고 싶을때 쿼리스트링을 사용하자
+    // 주소에서 ? 이후로 쿼리스트링! key=value로 보낸다. 여러개 보낼땐 &로 붙여준다
+    return axios.get(`/user/${userId || 0}/followers?offset=${offset}&limit=${limit}`,{
         withCredentials: true,
     });
 }
 function* loadFollowers(action) {
     try{
-        const result = yield call(loadFollowersAPI, action.data); //call 함수는 첫번째는 함수 두번째는 인자
+        const result = yield call(loadFollowersAPI, action.data, action.offset); //call 함수는 첫번째는 함수 두번째는 인자
         yield put({
             type: LOAD_FOLLOWERS_SUCCESS,
             data: result.data,
@@ -197,16 +199,16 @@ function* watchLoadFollowers() {
     yield takeEvery(LOAD_FOLLOWERS_REQUEST, loadFollowers);
 }
 
-function loadFollowingsAPI(userId) {
+function loadFollowingsAPI(userId, offset = 0, limit = 3) {
     //서버에 요청을 보내는 부분
     //userId가 있으면 남, 없으면 자신
-    return axios.get(`/user/${userId || 0}/followings`,{
+    return axios.get(`/user/${userId || 0}/followingsoffset=${offset}&limit=${limit}`,{
         withCredentials: true,
     });
 }
 function* loadFollowings(action) {
     try{
-        const result = yield call(loadFollowingsAPI, action.data); //call 함수는 첫번째는 함수 두번째는 인자
+        const result = yield call(loadFollowingsAPI, action.data, action.offset); //call 함수는 첫번째는 함수 두번째는 인자
         yield put({
             type: LOAD_FOLLOWINGS_SUCCESS,
             data: result.data,
